@@ -1,0 +1,553 @@
+<!doctype html><html lang="fi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Kattolaskenta V9.6</title><style>
+:root{font:15px system-ui,-apple-system,sans-serif;color:#13253d;background:#edf2f7}*{box-sizing:border-box}body{margin:0}header{background:#132641;color:#fff;padding:15px 16px;display:flex;justify-content:space-between;align-items:center}header b{font-size:18px}header small{display:block;color:#bfcee2;font-size:11px}main{max-width:980px;margin:auto;padding:12px}section{background:white;border:1px solid #d7e1ed;border-radius:16px;margin-bottom:12px;padding:14px;box-shadow:0 2px 8px #13264108}h2{font-size:16px;margin:0 0 12px}label{display:block;font-size:12px;color:#53657b;font-weight:650;margin-bottom:5px}input,select{width:100%;font-size:16px;padding:10px;border:1px solid #bbc9d9;border-radius:9px;background:#fff;color:#13253d;min-width:0}input:focus,select:focus{outline:2px solid #4385e4} .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row.three{grid-template-columns:repeat(3,1fr)}.field{margin-bottom:10px}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.tabs button,.actions button,.tool{border:1px solid #cad6e3;background:#f5f8fc;border-radius:10px;padding:11px 6px;color:#1b3553;font-weight:700;font-size:13px}.tabs button.on,.tool.on{background:#1769d4;color:white;border-color:#1769d4}.help{color:#5a6d81;font-size:12px;margin:8px 0 0;line-height:1.5}.warning{color:#a0450e;font-size:13px;padding:8px;background:#fff3e8;border-radius:8px;margin-top:8px}.canvas{overscroll-behavior:contain}.canvas{position:relative;background:#f5f9ff;border:1px solid #cfdae7;border-radius:13px;overflow:hidden;touch-action:none}svg{width:100%;height:330px;display:block;touch-action:none;user-select:none;-webkit-user-select:none} svg text[data-edit]{cursor:pointer;paint-order:stroke;stroke:#f5f9ff;stroke-width:4px} svg text[data-edit]:active{fill:#e36a16} .edit-info{background:#e8f2ff;border-radius:10px;padding:9px 11px;font-size:12px;color:#224f85;margin:8px 0} .tool.on{outline:3px solid #9ac5ff} #drawing{cursor:crosshair} .zoomtools{display:flex;gap:8px;margin:9px 0}.zoomtools button{flex:1;min-height:44px;border:1px solid #b8cadf;background:#eaf2fd;border-radius:9px;color:#1c4c84;font-weight:750;font-size:18px} .tools{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}.tool{min-height:54px;font-size:12px}.actions{display:flex;gap:8px;margin-top:10px}.actions button{flex:1}.actions button.primary{background:#1769d4;color:white}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#f0f5fb;border-radius:11px;padding:12px}.stat span{display:block;font-size:12px;color:#546a82}.stat strong{font-size:22px;display:block;margin-top:4px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#52647a;margin-top:9px}.dot{width:10px;height:10px;display:inline-block;border-radius:3px;margin-right:3px}.toolbar-note{font-size:12px;color:#49647e;margin-top:10px;min-height:35px} footer{text-align:center;font-size:11px;color:#698097;padding:10px 0 30px}@media (min-width:750px){.layout{display:grid;grid-template-columns:360px 1fr;gap:12px;align-items:start}.layout section{margin-bottom:12px}svg{height:450px}.tools{grid-template-columns:repeat(4,1fr)}}@media (orientation:landscape) and (max-height:500px){svg{height:250px}}
+ .tool:focus-visible{outline:3px solid #1769d4} .object-tip{background:#fff8e8;border:1px solid #f4d9ac;padding:10px;border-radius:10px;font-size:12px;line-height:1.5} .project-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px} svg [data-idx]{cursor:pointer} .slope-panel{margin:12px 0;padding:12px;background:#f0f6ff;border:1px solid #c7d8ec;border-radius:12px}.slope-panel h3{margin:0 0 8px;font-size:14px;color:#25486f}.slope-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.slope-dimension{min-height:54px;padding:9px;text-align:left;border:1px solid #c1d3e9;border-radius:9px;background:#fff;color:#264f80}.slope-dimension small{display:block;font-size:11px;color:#59718e}.slope-dimension strong{font-size:16px}.slope-hint{font-size:11px;color:#546b85;margin:9px 0 0}@media(max-width:355px){.slope-grid{grid-template-columns:1fr}} </style></head><body><header><div><b>🏠 Kattolaskenta <span style="color:#8dc5ff">V9.6</span></b><small>Puhelimelle suunniteltu kattokaavio</small></div><span style="font-size:12px">● Tallennus laitteelle</span></header><main><div class="layout"><div><section><h2>1. Valitse kattotyyppi</h2><div class="tabs" id="roofs" style="grid-template-columns:repeat(3,1fr)"><button data-roof="gable" class="on">Harjakatto</button><button data-roof="hip">Aumakatto</button><button data-roof="shed">Pulpettikatto</button><button data-roof="lshape">L-katto</button><button data-roof="tshape">T-katto</button></div><div id="wingFields" hidden><h2 style="margin-top:18px">Sivusiiven mitat</h2><p class="help">L- ja T-katto muodostetaan päärungosta ja siihen liittyvästä suorakulmaisesta sivusiivestä. Kaavio on tässä vaiheessa suunnitteluluonnos.</p><div class="row"><div class="field"><label>Siiven leveys (mm)</label><input id="wingWidth" type="number" inputmode="numeric" value="4000"></div><div class="field"><label>Siiven ulkonema (mm)</label><input id="wingDepth" type="number" inputmode="numeric" value="3500"></div></div><div id="tPositionFields" hidden><div class="row"><div class="field"><label>T-siiven etäisyys vasemmasta räystäspäädystä (mm)</label><input id="wingStart" type="number" inputmode="numeric" value="4400" min="0"></div><div class="field"><label>Etäisyys oikeasta räystäspäädystä (mm)</label><input id="wingRight" type="number" inputmode="numeric" value="4400" min="0"></div></div><p class="help">Mitat ovat pääkaton räystäslinjaa pitkin siiven vasempaan ja oikeaan reunaan. T-katossa siiven harja ja jiirien kärki kohdistetaan automaattisesti siiven keskelle, myös tallennetun työmaan latauksen jälkeen. Vastakkainen räystäsmitta päivittyy. Liittymäpistettä voi edelleen säätää erikseen.</p></div><div id="apexSideFields" hidden><h3 style="font-size:14px;margin:12px 0 8px">Jiirin kärjen sijainti päädystä</h3><div class="row"><div class="field"><label>Vasemmalta päädystä (mm)</label><input id="apexLeft" type="number" inputmode="numeric" min="0"></div><div class="field"><label>Oikealta päädystä (mm)</label><input id="apexRight" type="number" inputmode="numeric" min="0"></div></div><p class="help">Mitat koskevat jiirien yhteistä kärkeä. Muuta kumpaa tahansa: vastakkainen mitta päivittyy ja T-siipi siirtyy mukana. Kaaviossa näkyy vain suurempi päätymitta.</p></div><div class="field"><label>Siiven kattokaltevuus (°)</label><input id="wingPitch" type="number" inputmode="decimal" value="25" min="0" max="75"></div><div class="field"><label>Siiven liittymätyyppi</label><select id="joinType" style="width:100%;padding:12px;border:1px solid #bed0e3;border-radius:9px;font-size:16px"><option value="valley">Sisätaite / jiiri (yleisin)</option><option value="hip">Ulkotaite</option><option value="independent">Eritasoinen liittymä – tarkistettava</option></select></div><div class="row"><div class="field"><label>Jiirin kärjen sijainti päädyn suunnassa (mm, vasemmasta päädystä)</label><input id="joinX" type="number" inputmode="numeric" value="2000" min="0"></div><div class="field"><label>Jiirin kärjen etäisyys pääkaton harjalta (mm, vaakakuvassa)</label><input id="joinRidgeOffset" type="number" inputmode="numeric" value="2500" min="0"></div></div><p class="help">Voit muuttaa näitä sijoitusmittoja myös napauttamalla kaavion sinisiä mittalukuja. Jiirin arvo valitaan automaattisesti kokonaan, jolloin uuden mitan voi kirjoittaa heti. Jiirimittaa napauttamalla voit muuttaa jiirin vaakaprojektion pituutta: toinen jiiri päivittyy samalla.</p><p class="warning">Kaavioon merkityt jiirimitat (~) ovat muokattavia vaakaprojektion mittoja, eivät todellisia kaltevia pituuksia. Jiirien ja harjaliittymien todelliset pituudet vaativat vielä tarkemman 3D-geometrian. Näitä määriä ei pidä käyttää materiaalitilaukseen.</p></div><h2 style="margin-top:18px">2. Mittaustapa</h2><div class="tabs" id="modes"><button data-mode="ground" class="on">Maajalka</button><button data-mode="slopes">Lapemitat</button><button data-mode="free">Vapaa ✎</button></div><p class="help" id="methodTip"></p><div id="groundFields"><div class="row"><div class="field"><label>Rakennuksen pituus (mm)</label><input id="buildingL" type="number" inputmode="numeric" value="12000"></div><div class="field"><label>Rakennuksen leveys (mm)</label><input id="buildingW" type="number" inputmode="numeric" value="8000"></div></div><div class="row"><div class="field"><label>Päätyräystäs / pääty (mm)</label><input id="overEnd" type="number" inputmode="numeric" value="400"></div><div class="field"><label>Sivuräystäs / sivu (mm)</label><input id="overSide" type="number" inputmode="numeric" value="500"></div></div></div><div id="slopeFields" hidden><div class="row"><div class="field"><label>Harja / katon pituus (mm)</label><input id="ridgeL" type="number" inputmode="numeric" value="12800"></div><div class="field"><label>Lape A, kalteva pituus (mm)</label><input id="slopeA" type="number" inputmode="numeric" value="5000"></div></div><div class="field"><label>Lape B, kalteva pituus (mm)</label><input id="slopeB" type="number" inputmode="numeric" value="5000"></div><div id="wingSlopeFields" hidden><div class="row"><div class="field"><label>Lape C, kalteva pituus (mm)</label><input id="slopeC" type="number" inputmode="numeric" value="2207"></div><div class="field"><label>Lape D, kalteva pituus (mm)</label><input id="slopeD" type="number" inputmode="numeric" value="2207"></div></div><div class="field"><label>Harja B, pituus (mm)</label><input id="ridgeB" type="number" inputmode="numeric" value="5000"></div><p class="help">C ja D määrittävät siiven vaakaleveydet kaltevuuden avulla. Harja B määrittää siiven ulkoneman liittymästä räystäälle. Liittymän todellinen harjapituus vaatii erillisen 3D-tarkastelun.</p></div></div><div id="freeFields" hidden><p class="help">Vapaan mittapiirustuksen työkalua kehitetään. Käytä toistaiseksi maajalka- tai lapemittoja, jotta pinta-alat voidaan laskea luotettavasti.</p></div><div id="hipPitchFields" hidden><h3 style="font-size:14px;color:#25486f">Aumakaton kaltevuudet – jokainen lape erikseen</h3><div class="row"><div class="field"><label>Lape A (yläreuna), °</label><input id="hipPitchA" type="number" inputmode="decimal" value="25" min="1" max="75"></div><div class="field"><label>Lape B (alareuna), °</label><input id="hipPitchB" type="number" inputmode="decimal" value="25" min="1" max="75"></div><div class="field"><label>Lape C (vasen auma), °</label><input id="hipPitchC" type="number" inputmode="decimal" value="25" min="1" max="75"></div><div class="field"><label>Lape D (oikea auma), °</label><input id="hipPitchD" type="number" inputmode="decimal" value="25" min="1" max="75"></div></div><p class="help">Harjan paikka ja pituus päivittyvät kaltevuuksien mukaan. Geometria ja kattopinta-alat ovat suunnittelulaskelmia.</p></div><div class="row"><div class="field"><label>Kattokaltevuus (°)</label><input id="pitch" type="number" inputmode="decimal" value="25" min="0" max="75"></div><div class="field"><label>Mittayksikkö</label><input value="millimetri (mm)" disabled></div></div><div id="error" class="warning" hidden></div></section><section><h2>3. Kattokaavion työkalut</h2><div class="tools" id="toolBar"><button class="tool on" data-tool="move">☝️<br>Siirrä</button><button class="tool" data-tool="chimney">▣<br>Piippu</button><button class="tool" data-tool="vent">◉<br>Vilpe</button><button class="tool" data-tool="window">▤<br>Kattoikkuna</button><button class="tool" data-tool="snow">━<br>Lumieste</button><button class="tool" data-tool="ladder">≋<br>Lapetikas</button><button class="tool" data-tool="bridge">═<br>Kattosilta</button><button class="tool" data-tool="delete">✕<br>Poista</button><button class="tool" data-tool="edit">✎<br>Muokkaa varustetta</button></div><p id="toolHint" class="toolbar-note">Valitse työkalu. Siirrä-tilassa voit vetää symboleita sormella.</p><div class="actions"><button id="undo">↶ Kumoa</button><button id="fit">⤢ Näytä koko katto</button></div></section></div><div><section><h2>Kattokaavio – ylhäältä</h2><div class="zoomtools"><button type="button" id="zoomOut" aria-label="Loitonna">−</button><button type="button" id="zoomReset" aria-label="Palauta zoom">100 %</button><button type="button" id="zoomIn" aria-label="Lähennä">＋</button></div><div class="actions" style="margin:6px 0 10px"><button type="button" id="toggleDimEdit">✥ Muokkaa C-, D- ja harjamittoja</button><button type="button" id="resetDimEdit">Palauta sijainnit</button></div><p id="dimEditTip" class="help" hidden>Vedä vihreästä pisteestä mittaviivan alkupäätä ja sinisestä tekstistä mittalukua. C-, D- ja harjamittojen johtoviivat osuvat mittatekstin keskelle. Katon geometria ei muutu. Paina lopuksi Valmis.</p><div class="canvas"><svg id="drawing" viewBox="0 0 700 480" role="img" aria-label="Kattokaavio"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#dce8f4" stroke-width="1"/></pattern></defs><rect width="700" height="480" fill="url(#grid)"/></svg></div><div class="legend"><span><i class="dot" style="background:#d6e8fb"></i>Lape A</span><span><i class="dot" style="background:#afcdea"></i>Lape B</span><span><i class="dot" style="background:#1757a6"></i>Harja</span><span><i class="dot" style="background:#e87d2b"></i>Kattoturvatuote</span></div><p class="help">Zoomaa kahdella sormella tai +/−-painikkeilla. Siirrä-tilassa vedä tyhjää taustaa liikuttaaksesi kattokaaviota tai vedä merkintää siirtääksesi sitä. Napauta mittalukua muuttaaksesi sitä. Valitse Muokkaa varustetta ja napauta lumiestettä, tikasta tai kattosiltaa muuttaaksesi pituuden tai suunnan. Valitse ensin varustetyökalu, napauta sitten kattoa. Lapemitat näkyvät kaaviossa muodossa A 4965 mm, B 4965 mm jne. Jiirimitta näkyy jiirin suuntaisesti jiiriviivan yläpuolella. Napauta mittalukua muokataksesi sitä. Piirros on suhteellinen mittakaavakuva, ei vahvistettu tulostusmittakaava. Symbolit voi sijoittaa napauttamalla kattoa.</p></section><section><h2>Automaattiset määrät</h2><div class="stats"><div class="stat"><span>Kattopinta-ala</span><strong id="area">–</strong></div><div class="stat"><span>Harja</span><strong id="ridge">–</strong></div><div class="stat"><span>Alaräystäät</span><strong id="eaves">–</strong></div><div class="stat"><span>Lumiesteet</span><strong id="snowLen">–</strong></div></div><p class="help" id="subAreas"></p><p class="help" id="extras"></p></section><section><h2>Kattolappeet ja liittymät – V9.6</h2><p class="help">Aumakatossa voi määrittää jokaiselle neljälle lappeelle oman kaltevuuden. Harja ja aumalinjat mukautuvat, jokaisen neljän ulkotaitteen kalteva pituus näytetään (U1–U4) ja pinta-alat eritellään. L- ja T-katoissa voit muuttaa sivusiiven mittoja ja kaltevuutta erikseen. Piirros näyttää runkojen suunnat, jiirien havainnolliset vaakaprojektiomitat (~) ja harjaviivan jatkumisen liittymäpisteeseen. Liittymätyypin voi valita, mutta liittymäviivat ovat vain havainnollistavia: oikea sijainti edellyttää harjakorkeuksia ja kattojen 3D-leikkausgeometriaa. Kattopinta-ala on kahden osan alustava yhteenlasku, ei lopullinen katemäärä.</p></section><section><h2>Työmaan tallennus</h2><div class="field"><label>Työmaan nimi</label><input id="projectName" placeholder="Esim. Omakotitalo / katuosoite" autocomplete="off"></div><div class="project-bar"><button id="saveProject" type="button">Tallenna työmaa</button><button id="loadProject" type="button">Avaa työmaa</button></div><div class="project-bar"><button id="exportProject" type="button">⬇️ Lataa varmuuskopio</button><button id="importProject" type="button">⬆️ Avaa tiedostosta</button></div><input id="importFile" type="file" accept=".json,application/json" style="display:none"><p id="saveStatus" class="object-tip" role="status">Työmaa voidaan tallentaa selaimeen ja erillisenä varmuuskopiona Tiedostot-sovellukseen. Älä käytä julkista testisivua asiakastietojen säilytykseen.</p><div class="actions"><button id="save" class="primary">💾 Tallenna</button><button id="reset">Tyhjennä merkinnät</button></div><p class="help">Tiedot tallentuvat tämän selaimen laitteelle. Tämä versio ei vielä laske tarjousta.</p></section></div></div><footer>Kattolaskenta V9.6 · Testiversio · Ei vielä tilaus- tai tarjouslaskentaan</footer></main>
+<dialog id="measureDialog" style="border:0;border-radius:16px;padding:22px;width:min(92vw,380px);box-shadow:0 15px 45px #1228"><form method="dialog"><label id="measureLabel" for="measureInput" style="font-size:16px">Mitta (mm)</label><input type="text" id="measureInput" inputmode="decimal" autocomplete="off" style="font-size:23px;margin:10px 0 18px"><div class="project-bar"><button type="button" id="measureCancel">Peruuta</button><button type="submit" id="measureAccept" style="background:#1769d4;color:#fff;border:0;border-radius:8px">Hyväksy</button></div><p id="measureError" style="color:#a0450e" aria-live="polite"></p></form></dialog><script>
+(()=>{'use strict';const $=id=>document.getElementById(id), svg=$('drawing'),NS='http://www.w3.org/2000/svg';let roof='gable',mode='ground',tool='move',items=[],history=[],pending=null,geo=null,drag=null,dragPointer=null,dragStart=null,dragOriginal=null;let view={x:0,y:0,w:700,h:480},touches=new Map(),pinchStart=null;
+// T-liittymässä jiirien kärki ja siiven harja seuraavat aina siiven keskilinjaa.
+// Ei käytetä edellisen piirtokerran siirtymää: silloin vanhat tallennetut
+// joinX-arvot tekivät siiven harjasta vinoon piirtyvän.
+function followWingPosition(){
+ if(roof!=='tshape')return;
+ const left=val('wingStart'), width=mode==='slopes'?(val('slopeC')+val('slopeD'))*Math.cos(val('wingPitch')*Math.PI/180):val('wingWidth');
+ if(Number.isFinite(left)&&Number.isFinite(width)){
+   $('joinX').value=String(Math.round(left+width/2));
+ }
+}
+function syncWingRight(){const L=mode==='slopes'?val('ridgeL'):val('buildingL')+2*val('overEnd');const width=mode==='slopes'?(val('slopeC')+val('slopeD'))*Math.cos(val('wingPitch')*Math.PI/180):val('wingWidth');const right=L-width-val('wingStart');$('wingRight').value=Number.isFinite(right)?String(Math.round(right)):'';}
+let dimEditMode=false,dimDrag=null;
+const defaultDimLayout=()=>({C:{anchor:0.68,ax:0,dx:-52,dy:34},D:{anchor:0.68,ax:0,dx:52,dy:34},HB:{ax:0,ay:0,dx:14,dy:-14},HM:{ax:0,ay:0,dx:0,dy:-24}});
+let dimLayout=defaultDimLayout();
+const ids=['joinType','buildingL','buildingW','overEnd','overSide','ridgeL','slopeA','slopeB','slopeC','slopeD','ridgeB','pitch','hipPitchA','hipPitchB','hipPitchC','hipPitchD','wingWidth','wingDepth','wingPitch','wingStart','joinX','joinRidgeOffset'];const val=id=>Number($(id).value);const mm=n=>Math.round(n).toLocaleString('fi-FI');const meters=n=>(n/1000).toLocaleString('fi-FI',{maximumFractionDigits:2})+' m';const sqm=n=>(n/1e6).toLocaleString('fi-FI',{maximumFractionDigits:1})+' m²';function node(tag,attrs={},parent=svg){const el=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));parent.appendChild(el);return el}function text(x,y,str,attrs={}){const el=node('text',{x,y,'text-anchor':'middle','font-size':15,'font-weight':650,fill:'#2d527b',...attrs});el.textContent=str;return el}
+function setView(){svg.setAttribute('viewBox',[view.x,view.y,view.w,view.h].join(' '));$('zoomReset').textContent=Math.round(700/view.w*100)+' %'}function zoomAt(factor,x=350,y=240){const nw=Math.max(115,Math.min(1400,view.w/factor)),nh=nw*480/700;const rx=(x-view.x)/view.w,ry=(y-view.y)/view.h;view={x:x-rx*nw,y:y-ry*nh,w:nw,h:nh};setView()}function svgPos(e){const point=svg.createSVGPoint();point.x=e.clientX;point.y=e.clientY;const matrix=svg.getScreenCTM();return matrix?point.matrixTransform(matrix.inverse()):null}function normalizeDimLayout(o){const d=defaultDimLayout();for(const k of ['C','D','HB','HM'])for(const f of (k==='C'||k==='D'?['anchor','ax','dx','dy']:['ax','ay','dx','dy']))if(o&&o[k]&&Number.isFinite(Number(o[k][f])))d[k][f]=Number(o[k][f]);return d}
+function connectLabelAtCenter(t,ax,ay){
+  // SVG text midpoint rather than start/end anchor, so line hits the center of the label.
+  let centerX=Number(t.getAttribute('x')), labelY=Number(t.getAttribute('y'));
+  try{const box=t.getBBox();if(box.width>0)centerX=box.x+box.width/2;}catch(e){}
+  const endY=labelY+((ay<labelY)?-13:5);
+  const link=node('line',{x1:ax,y1:ay,x2:centerX,y2:endY,
+    stroke:'#6889b0','stroke-width':1.7,'stroke-dasharray':'4 3','pointer-events':'none'});
+  // Place line behind text and make any dim-edit point remain visible.
+  t.parentNode.insertBefore(link,t);
+}
+function movableRidge(key,baseX,baseY,value,id,anchorX,anchorY){
+  const cfg=dimLayout[key];
+  const ax=anchorX+cfg.ax,ay=anchorY+cfg.ay;
+  const lx=baseX+cfg.dx,ly=baseY+cfg.dy;
+  const t=text(lx,ly,value,{'data-edit':id,'data-dim-handle':key+':label',
+    'font-size':key==='HB'?11:15,'text-anchor':key==='HB'?'start':'middle',
+    fill:'#174e87','font-weight':750});
+  connectLabelAtCenter(t,ax,ay);
+  if(dimEditMode){
+    node('circle',{cx:ax,cy:ay,r:11,fill:'#31ad76',stroke:'#fff',
+      'stroke-width':2,'data-dim-handle':key+':anchor'});
+    node('circle',{cx:lx,cy:ly-4,r:5,fill:'#1769d4',stroke:'#fff',
+      'stroke-width':1.5,'pointer-events':'none'});
+  }
+  return t;
+}
+function persist(){try{localStorage.setItem('roofV4',JSON.stringify({roof,mode,items,values:Object.fromEntries(ids.map(i=>[i,$(i).value])),dimLayout}))}catch(e){}}
+function push(){history.push(JSON.stringify(items));if(history.length>35)history.shift()}
+function geometry(){let pitch=val('pitch'),c=Math.cos(pitch*Math.PI/180);if(!Number.isFinite(pitch)||pitch<0||pitch>75||c<=0)throw Error('Kattokaltevuuden tulee olla 0–75°.');let L,W,a,b;if(mode==='slopes'){L=val('ridgeL');a=val('slopeA')*c;b=(roof==='shed'?a:val('slopeB')*c);W=roof==='shed'?a:a+b}else{L=val('buildingL')+2*val('overEnd');W=val('buildingW')+2*val('overSide');a=W/2;b=W/2}if(!Number.isFinite(L)||!Number.isFinite(W)||L<=0||W<=0||a<=0||b<=0)throw Error('Syötä positiiviset kattomitat.');if(L>200000||W>100000)throw Error('Tarkista mitat: arvo vaikuttaa poikkeuksellisen suurelta.');let A=L*W/c,ridge=roof==='hip'?Math.max(0,L-W):roof==='shed'?0:L, eaves=roof==='shed'?L:2*L;
+ if(roof==='lshape'||roof==='tshape'){
+   const wingPitch=val('wingPitch');const wingWidth=mode==='slopes'?(val('slopeC')+val('slopeD'))*Math.cos(wingPitch*Math.PI/180):val('wingWidth'),wingDepth=mode==='slopes'?val('ridgeB'):val('wingDepth');
+   if(!Number.isFinite(wingWidth)||wingWidth<=0||wingWidth>=L||!Number.isFinite(wingDepth)||wingDepth<=0||!Number.isFinite(wingPitch)||wingPitch<0||wingPitch>75)throw Error('Tarkista siiven mitat ja kaltevuus: siiven on oltava päärunkoa kapeampi.');
+   const start=roof==='lshape'?0:val('wingStart');
+   if(roof==='tshape'&&(!Number.isFinite(start)||start<0||start+wingWidth>L))throw Error('T-siiven sijoitus ei mahdu pääkaton räystäälle. Vasemman mitan + siiven leveyden tulee olla enintään pääkaton pituus.');
+   const joinX=val('joinX'),joinRidgeOffset=val('joinRidgeOffset');
+   if(!Number.isFinite(joinX)||joinX<0||joinX>L||!Number.isFinite(joinRidgeOffset)||joinRidgeOffset<0||joinRidgeOffset>=W/2)throw Error('Jiirin kärjen sijoitus ei mahdu päärungon mittoihin. Etäisyys harjalta saa olla alle puolet katon vaakaleveydestä.');
+   const wingCos=Math.cos(wingPitch*Math.PI/180);
+   A=L*W/c+wingWidth*wingDepth/wingCos;
+   ridge=NaN; eaves=NaN;
+   return {L,W:W+wingDepth,a,b,A,ridge,eaves,slopeAreas:[L*W/c,wingWidth*wingDepth/wingCos],pitch,wing:{width:wingWidth,depth:wingDepth,start,bodyW:W,pitch:wingPitch}};
+ }
+if(roof==='hip'){
+   const degrees=['A','B','C','D'].map(k=>val('hipPitch'+k));
+   if(degrees.some(v=>!Number.isFinite(v)||v<=0||v>75))throw Error('Aumakaton kaikkien neljän lappeen kaltevuuden tulee olla 1–75°.');
+   const tan=degrees.map(v=>Math.tan(v*Math.PI/180));
+   const h=W/(1/tan[0]+1/tan[1]), y=h/tan[0];
+   const xLeft=h/tan[2],xRight=L-h/tan[3];
+   if(xLeft>=xRight)throw Error('Aumaharja ei mahdu näillä kaltevuuksilla. Lisää katon pituutta tai muuta päätyaumojen kaltevuuksia.');
+   const len=xRight-xLeft;
+   const top=(L+len)*y/2/Math.cos(degrees[0]*Math.PI/180);
+   const bottom=(L+len)*(W-y)/2/Math.cos(degrees[1]*Math.PI/180);
+   const left=W*xLeft/2/Math.cos(degrees[2]*Math.PI/180);
+   const right=W*(L-xRight)/2/Math.cos(degrees[3]*Math.PI/180);
+   A=top+bottom+left+right;ridge=len;eaves=2*(L+W);
+   return {L,W,a:y,b:W-y,A,ridge,eaves,slopeAreas:[top,bottom,left,right],pitch,hip:{xLeft,xRight,y,h,degrees}};
+ }
+let slopeAreas=roof==='gable'?[L*a/c,L*b/c]:roof==='shed'?[A]:[A];return {L,W,a,b,A,ridge,eaves,slopeAreas,pitch}}
+function render(){followWingPosition();const err=$('error');err.hidden=true;try{geo=geometry()}catch(e){geo=null;err.textContent=e.message;err.hidden=false;return}let {L,W,a,b,A,ridge,eaves,slopeAreas}=geo;
+$('hipPitchFields').hidden=roof!=='hip';if(geo.wing){$('apexSideFields').hidden=roof!=='tshape';if(roof==='tshape'){if(document.activeElement!==$('apexLeft'))$('apexLeft').value=Math.round(val('joinX'));if(document.activeElement!==$('apexRight'))$('apexRight').value=Math.round(L-val('joinX'));}}else{$('apexSideFields').hidden=true;}
+while(svg.lastChild&&svg.lastChild.tagName!=='rect')svg.lastChild.remove();const scale=Math.min(460/L,270/W),ox=(700-L*scale)/2,oy=(480-W*scale)/2;const bottomPad=Math.max(140,Math.min(220,480-(oy+W*scale)-40));geo.transform={scale,ox,oy};const P=(x,y)=>[ox+x*scale,oy+y*scale], poly=(pts,fill)=>node('polygon',{points:pts.map(p=>P(...p).join(',')).join(' '),fill,stroke:'#4275aa','stroke-width':2});const line=(p1,p2,color='#1a5ba6',dash='')=>node('line',{x1:P(...p1)[0],y1:P(...p1)[1],x2:P(...p2)[0],y2:P(...p2)[1],stroke:color,'stroke-width':3,'stroke-dasharray':dash});if(geo.wing){const w=geo.wing;const wingApex=[val('joinX'),w.bodyW/2+val('joinRidgeOffset')];poly([[0,0],[L,0],[L,w.bodyW],[0,w.bodyW]],'#d6e8fb');poly([[w.start, w.bodyW],[wingApex[0],wingApex[1]],[wingApex[0],W],[w.start,W]],'#afcdea');poly([[wingApex[0],wingApex[1]],[w.start+w.width,w.bodyW],[w.start+w.width,W],[wingApex[0],W]],'#afcdea');line([0,w.bodyW/2],[L,w.bodyW/2]);/* poistettu katkoviiva siiven liittymästä, jotta lape pysyy puhtaampana */
+  if(roof==='tshape'){
+    const yOuter=w.bodyW+18/scale;
+    const dim=(x1,x2,id)=>{
+      if(x2-x1<80)return;
+      const t=text(ox+(x1+x2)*scale/2,oy+yOuter*scale-4,mm(x2-x1)+' mm',{'data-edit':id,'font-size':11,fill:'#08665c','font-weight':750});
+      t.setAttribute('style','cursor:pointer');
+    };
+    dim(0,w.start,'wingStart');
+    dim(w.start+w.width,L,'wingRight');
+  }movableRidge('HM',350,oy+12,mm(L)+' mm',mode==='slopes'?'ridgeL':'buildingL',ox+L*scale/2,oy+(geo.wing?geo.wing.bodyW/2:W/2)*scale);
+  const wingRidgeLabel=movableRidge('HB',
+    ox+(w.start+w.width)*scale,
+    oy+(w.bodyW+w.depth*0.52)*scale,
+    'Harja B '+mm(w.depth)+' mm',mode==='slopes'?'ridgeB':'wingDepth',
+    ox+(w.start+w.width/2)*scale,oy+(w.bodyW+w.depth*0.52)*scale);
+  wingRidgeLabel.setAttribute('style','cursor:pointer');
+}else if(roof==='gable'){poly([[0,0],[L,0],[L,a],[0,a]],'#d6e8fb');poly([[0,a],[L,a],[L,W],[0,W]],'#afcdea');line([0,a],[L,a]);movableRidge('HM',350,oy+12,mm(L)+' mm',mode==='slopes'?'ridgeL':'buildingL',ox+L*scale/2,oy+(geo.wing?geo.wing.bodyW/2:W/2)*scale);}else if(roof==='shed'){poly([[0,0],[L,0],[L,W],[0,W]],'#d6e8fb');line([0,0],[L,0],'#537595','6 5');movableRidge('HM',350,oy+12,mm(L)+' mm',mode==='slopes'?'ridgeL':'buildingL',ox+L*scale/2,oy+(geo.wing?geo.wing.bodyW/2:W/2)*scale);}else{const h=geo.hip, xl=h.xLeft,xr=h.xRight,y=h.y;poly([[0,0],[L,0],[xr,y],[xl,y]],'#d6e8fb');poly([[xl,y],[xr,y],[L,W],[0,W]],'#afcdea');poly([[0,0],[xl,y],[0,W]],'#c8dff4');poly([[L,0],[xr,y],[L,W]],'#bdd8f0');line([xl,y],[xr,y]);
+  // Aumakaton harjamitta suoraan harjaviivan suuntaisesti; ei erillistä johtoviivaa.
+  // Kirjoitetaan teksti harjan keskikohdan päälle luettavuutta varten vaalealla reunuksella.
+  const ridgeMidX=ox+(xl+xr)*scale/2, ridgeY=oy+y*scale;
+  const ridgePx=Math.abs(xr-xl)*scale;
+  const ridgeLabel=text(ridgeMidX,ridgeY-5,mm(geo.ridge)+' mm',{
+    'font-size':ridgePx<85?10:12,'font-weight':750,fill:'#174e87',
+    stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke',
+    'text-anchor':'middle','pointer-events':'none'});
+}// Kaltevat lapemitat ovat piirtopinnan SISÄLLÄ, mutta katon ääriviivojen ulkopuolella.
+// Johtoviivat osoittavat oikean lappeen, eivätkä tekstit peitä katon varusteita.
+const mainCos=Math.cos(val('pitch')*Math.PI/180);
+function outerSlopeLabel(anchorX,anchorY,labelX,labelY,value,id,name,side,showLeader=true){
+  // Mittateksti sijoitetaan katon ulkopuolelle. Viiva voidaan piilottaa, jos lappeen pinta halutaan puhtaammaksi.
+  if(showLeader){
+    node('line',{x1:anchorX,y1:anchorY,x2:labelX,y2:labelY,stroke:'#6487ad','stroke-width':1.3,'stroke-dasharray':'3 3','pointer-events':'none'});
+  }
+  const align=side==='left'?'end':side==='right'?'start':'middle';
+  const tx=labelX+(side==='left'?-4:side==='right'?4:0);
+  const t=text(tx,labelY-4,name+' '+mm(value)+' mm',{'data-edit':id,'font-size':12,'font-weight':750,'text-anchor':align,fill:'#174e87'});
+  t.setAttribute('aria-label',name+': '+mm(value)+' millimetriä. Muokkaa napauttamalla.');
+}
+if(geo.wing){
+  const w=geo.wing,wingCos=Math.cos(w.pitch*Math.PI/180);
+  outerSlopeLabel(ox,oy+w.bodyW*0.30*scale,ox-18,oy+w.bodyW*0.30*scale,(mode==='slopes'?geo.a:w.bodyW/2)/mainCos,mode==='slopes'?'slopeA':'buildingW','A','left');
+  outerSlopeLabel(ox+L*scale,oy+w.bodyW*0.72*scale,ox+L*scale+18,oy+w.bodyW*0.72*scale,(mode==='slopes'?geo.b:w.bodyW/2)/mainCos,mode==='slopes'?'slopeB':'buildingW','B','right');
+  // C- ja D-mittojen tekstin sekä johtoviivan lähtöpisteen voi vetää erikseen.
+  const wingBottomY=oy+(w.bodyW+w.depth)*scale;
+  const wingTopY=oy+w.bodyW*scale;
+  const cX=ox+w.start*scale, dX=ox+(w.start+w.width)*scale;
+  function wingSlopeGuide(edgeX,key,value,id,name){
+    const cfg=dimLayout[key], side=key==='C'?-1:1;
+    const anchorX=edgeX+(cfg.ax||0);
+    const anchorY=wingTopY+(wingBottomY-wingTopY)*cfg.anchor;
+    const labelX=edgeX+cfg.dx, labelY=wingBottomY+cfg.dy;
+    const t=text(labelX,labelY,name+' '+mm(value)+' mm',{
+      'data-edit':id,'data-dim-handle':key+':label','font-size':12,'font-weight':750,
+      'text-anchor':side<0?'end':'start',fill:'#174e87'});
+    t.setAttribute('aria-label',name+': '+mm(value)+' millimetriä. Muokkaa napauttamalla.');
+    connectLabelAtCenter(t,anchorX,anchorY);
+    if(dimEditMode){
+      node('circle',{cx:anchorX,cy:anchorY,r:11,fill:'#31ad76',stroke:'#fff',
+        'stroke-width':2,'data-dim-handle':key+':anchor'});
+      node('circle',{cx:labelX,cy:labelY-4,r:5,fill:'#1769d4',stroke:'#fff',
+        'stroke-width':1.5,'pointer-events':'none'});
+    }
+  }
+  wingSlopeGuide(cX,'C',mode==='slopes'?val('slopeC'):(w.width/2)/wingCos,
+    mode==='slopes'?'slopeC':'wingWidth','C');
+  wingSlopeGuide(dX,'D',mode==='slopes'?val('slopeD'):(w.width/2)/wingCos,
+    mode==='slopes'?'slopeD':'wingWidth','D');
+}else if(roof==='gable'){
+  outerSlopeLabel(ox,oy+a*0.5*scale,ox-17,oy+a*0.5*scale,a/mainCos,mode==='slopes'?'slopeA':'buildingW','A','left');
+  outerSlopeLabel(ox+L*scale,oy+(a+b*0.5)*scale,ox+L*scale+17,oy+(a+b*0.5)*scale,b/mainCos,mode==='slopes'?'slopeB':'buildingW','B','right');
+}else if(roof==='shed'){
+  outerSlopeLabel(ox,oy+W*0.5*scale,ox-17,oy+W*0.5*scale,W/mainCos,mode==='slopes'?'slopeA':'buildingW','A','left');
+}else if(geo.hip){
+  const h=geo.hip;
+  const dims=[h.y/Math.cos(h.degrees[0]*Math.PI/180),(W-h.y)/Math.cos(h.degrees[1]*Math.PI/180),h.xLeft/Math.cos(h.degrees[2]*Math.PI/180),(L-h.xRight)/Math.cos(h.degrees[3]*Math.PI/180)];
+  // Aumakaton lapemitat lappeiden SISÄLLE. Ulkopuoli jätetään räystäsmitoille.
+  // Nelikulmaisilla A- ja B-lappeilla mitat ovat keskellä harjan ja räystään välissä.
+  // Kolmiomaisilla C- ja D-aumoilla ne sijoitetaan kolmion painopisteeseen.
+  function hipSlopeLabel(x,y,value,name){
+    const px=ox+x*scale,py=oy+y*scale;
+    const el=text(px,py,name+' '+mm(value)+' mm',{
+      'font-size':11,'font-weight':750,fill:'#174e87',
+      stroke:'#f5f9ff','stroke-width':3,'paint-order':'stroke',
+      'text-anchor':'middle','pointer-events':'none'});
+    el.setAttribute('aria-label','Lape '+name+': '+mm(value)+' millimetriä');
+  }
+  hipSlopeLabel((h.xLeft+h.xRight)/2,h.y*0.50,dims[0],'A');
+  hipSlopeLabel((h.xLeft+h.xRight)/2,h.y+(W-h.y)*0.52,dims[1],'B');
+  hipSlopeLabel(h.xLeft/3,(W+h.y)/3,dims[2],'C');
+  hipSlopeLabel((2*L+h.xRight)/3,(W+h.y)/3,dims[3],'D');
+  // Neljän ulkotaitteen todelliset kaltevat pituudet:
+  // vaakaetäisyys katon kulmasta harjan päätepisteeseen sekä korkeusero h.
+  // Merkitään mitat suoraan niiden omien ulkotaiteviivojen viereen.
+  const hipEdges=[
+    [[0,0],[h.xLeft,h.y]],
+    [[0,W],[h.xLeft,h.y]],
+    [[L,0],[h.xRight,h.y]],
+    [[L,W],[h.xRight,h.y]]
+  ];
+  hipEdges.forEach(([start,end],index)=>{
+    const dx=end[0]-start[0],dy=end[1]-start[1];
+    const trueLength=Math.hypot(dx,dy,h.h);
+    const t=0.46;
+    const centerX=ox+(start[0]+dx*t)*scale;
+    const centerY=oy+(start[1]+dy*t)*scale;
+    const planeLen=Math.hypot(dx,dy)||1;
+    // Osoitetaan tekstillä aumalinjan lappeen puolelle, ei harjan päälle.
+    const side=(index===0||index===3)?-1:1;
+    const labelX=centerX+side*(-dy/planeLen)*14;
+    const labelY=centerY+side*(dx/planeLen)*14;
+    let angle=Math.atan2(dy,dx)*180/Math.PI;
+    if(angle>90||angle< -90)angle+=180;
+    const label=text(labelX,labelY,'U'+(index+1)+' '+mm(trueLength)+' mm',{
+      'font-size':10,'font-weight':750,fill:'#77512e',
+      stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+    label.setAttribute('transform',`rotate(${angle} ${labelX} ${labelY})`);
+    label.setAttribute('aria-label','Ulkotaite '+(index+1)+': '+mm(trueLength)+' millimetriä');
+  });
+}else{
+  outerSlopeLabel(ox,oy+W*0.27*scale,ox-17,oy+W*0.27*scale,(W/2)/mainCos,mode==='slopes'?'slopeA':'buildingW','A','left');
+  outerSlopeLabel(ox+L*scale,oy+W*0.73*scale,ox+L*scale+17,oy+W*0.73*scale,(W/2)/mainCos,mode==='slopes'?'slopeB':'buildingW','B','right');
+}
+if(geo.wing){
+  const w=geo.wing;
+  const cx=val('joinX'), junctionY=w.bodyW;
+  const jt=$('joinType').value;
+  const apex=[cx,w.bodyW/2+val('joinRidgeOffset')];
+  line([cx,apex[1]],[w.start+w.width/2,W]);
+  // Sijoitusmitat: harjalta jiirin kärkeen sekä päädystä sivusuunnassa.
+  const apexX=ox+cx*scale, apexY=oy+apex[1]*scale;
+  const ridgeArrowUp=text(apexX,apexY-31,'↑',{'font-size':12,fill:'#1557a1','text-anchor':'middle',stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+  const ridgeText=text(apexX,apexY-18,mm(val('joinRidgeOffset'))+' mm',{'data-edit':'joinRidgeOffset','font-size':11,fill:'#1557a1','text-anchor':'middle',stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+  const ridgeArrowDown=text(apexX,apexY-5,'↓',{'font-size':12,fill:'#1557a1','text-anchor':'middle',stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+  ridgeText.setAttribute('style','cursor:pointer');
+  // Yksi vaakamittaviiva pidemmältä päädyltä jiirin kärkeen.
+  // Päätymitat ovat symmetrisesti sidoksissa katon kokonaispituuteen.
+  const leftDistance=cx,rightDistance=L-cx;
+  const fromLeft=leftDistance>=rightDistance;
+  const fromX=fromLeft?0:L;
+  const dimensionY=apex[1];
+  const dimColor='#7a4cc2';
+  const midX=ox+(fromX+cx)*scale/2;
+  const distance=fromLeft?leftDistance:rightDistance;
+  const sideY=oy+dimensionY*scale+10;
+  text(midX-54,sideY,'←',{'font-size':12,fill:dimColor,'text-anchor':'middle',stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+  const sideText=text(midX,sideY,mm(distance)+' mm',{'data-edit':fromLeft?'apexLeft':'apexRight','font-size':12,fill:dimColor,'text-anchor':'middle',stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+  text(midX+54,sideY,'→',{'font-size':12,fill:dimColor,'text-anchor':'middle',stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+  sideText.setAttribute('style','cursor:pointer');
+  // Liittymien pisteet ovat tässä prototyypissä kaavioluonnoksia.
+  // Jiirin todellista 3D-pituutta ei voi päätellä ilman kattotasojen korkeustietoja.
+  const joinLine=(p1,p2,color,label,side)=>{
+    line(p1,p2,color,'5 3');
+    const rawDx=p2[0]-p1[0], rawDy=p2[1]-p1[1];
+    const length=Math.hypot(rawDx,rawDy);
+    const t=0.52;
+    const mx=ox+(p1[0]+rawDx*t)*scale;
+    const my=oy+(p1[1]+rawDy*t)*scale;
+    let angle=Math.atan2(rawDy,rawDx)*180/Math.PI;
+    if(angle>90||angle<-90) angle+=180;
+    const nx=side<0 ? rawDy/length : -rawDy/length;
+    const ny=side<0 ? -rawDx/length : rawDx/length;
+    const px=mx+nx*7;
+    const py=my+ny*7;
+    const labelEl=text(px,py,'~'+mm(length)+' mm',{'data-jiiri':side<0?'left':'right','font-size':10,fill:color,'font-weight':700,'text-anchor':'middle',stroke:'#f5f9ff','stroke-width':4,'paint-order':'stroke'});
+    labelEl.setAttribute('transform','rotate('+angle+' '+px+' '+py+')');
+    labelEl.setAttribute('style','cursor:pointer');
+  };
+  if(jt==='valley'){
+    joinLine([w.start,junctionY],apex,'#6b4a2a','Jiiri',-1);
+    joinLine([w.start+w.width,junctionY],apex,'#6b4a2a','Jiiri',1);
+  }else if(jt==='hip'){
+    joinLine([w.start,junctionY],apex,'#8754a8','Ulkotaite',-1);
+    joinLine([w.start+w.width,junctionY],apex,'#8754a8','Ulkotaite',1);
+  }else{
+    text(ox+cx*scale,oy+(junctionY-w.width*0.25)*scale,'Liittymä tarkistettava',{'font-size':11,fill:'#6b4a2a'});
+  }
+
+}
+const grp=node('g',{'id':'marks'});items.forEach((it,i)=>{const x=ox+it.x*L*scale,y=oy+it.y*W*scale;if(it.kind==='segment'){const X=ox+it.x2*L*scale,Y=oy+it.y2*W*scale;const dx=X-x,dy=Y-y,dist=Math.hypot(dx,dy)||1,angle=Math.atan2(dy,dx)*180/Math.PI;
+ const g=node('g',{transform:`translate(${x} ${y}) rotate(${angle})`},grp);
+ // Osumapinta helpottaa kosketusta. Realistiset symbolit skaalautuvat katon mukana.
+ node('line',{x1:0,y1:0,x2:dist,y2:0,stroke:'transparent','stroke-width':34,'data-idx':i},g);
+ if(it.type==='snow'){
+   [-4,4].forEach(v=>node('line',{x1:0,y1:v,x2:dist,y2:v,stroke:'#b45420','stroke-width':2.7,'stroke-linecap':'round','data-idx':i},g));
+   for(let t=0;t<=dist;t+=Math.max(23,dist/Math.ceil(dist/38))){node('rect',{x:Math.min(t,dist)-3,y:-9,width:6,height:18,rx:1.5,fill:'#b87945',stroke:'#864219','stroke-width':1,'data-idx':i},g)}
+ }else if(it.type==='ladder'){
+   [-8,8].forEach(v=>node('line',{x1:0,y1:v,x2:dist,y2:v,stroke:'#365f87','stroke-width':3,'data-idx':i},g));
+   for(let t=4;t<dist;t+=17)node('line',{x1:t,y1:-8,x2:t,y2:8,stroke:'#365f87','stroke-width':2.5,'data-idx':i},g);
+ }else{
+   node('rect',{x:0,y:-11,width:dist,height:22,rx:2,fill:'#d0dae1',stroke:'#586d78','stroke-width':2,'data-idx':i},g);
+   [-7,0,7].forEach(v=>node('line',{x1:2,y1:v,x2:Math.max(2,dist-2),y2:v,stroke:'#647985','stroke-width':1.5,'data-idx':i},g));
+   for(let t=5;t<dist;t+=12)node('line',{x1:t,y1:-10,x2:t,y2:10,stroke:'#8195a1','stroke-width':1,'data-idx':i},g);
+   for(let t=0;t<=dist;t+=Math.max(35,dist/Math.ceil(dist/55)))node('rect',{x:Math.min(t,dist)-3,y:-14,width:6,height:28,fill:'#56717e','data-idx':i},g);
+ }
+ const sloped=it.type==='ladder';const len=Math.hypot((it.x2-it.x)*L,(it.y2-it.y)*W);if(len>=1)text((x+X)/2,(y+Y)/2-16,(sloped?'Lapetikas':it.type==='snow'?'Lumieste':'Kattosilta')+' '+meters(len),{'font-size':11,'font-weight':750,fill:'#294866','data-idx':i});
+ }else{const title={chimney:'PI',vent:'VI',window:'IK'}[it.type];node(it.type==='vent'?'circle':'rect',it.type==='vent'?{cx:x,cy:y,r:14,fill:'#fef2df',stroke:'#ad5a11','stroke-width':2,'data-idx':i}:{x:x-16,y:y-13,width:32,height:26,rx:3,fill:'#fef2df',stroke:'#ad5a11','stroke-width':2,'data-idx':i},grp);text(x,y+4,title,{'font-size':11,fill:'#8c430e','pointer-events':'none'})}});if(pending)node('circle',{cx:ox+pending.x*L*scale,cy:oy+pending.y*W*scale,r:6,fill:'#e87d2b'});$('area').textContent=sqm(A);$('ridge').textContent=geo.wing?'Tarkennettava':meters(ridge);$('eaves').textContent=geo.wing?'Tarkennettava':meters(eaves);$('snowLen').textContent=meters(items.filter(i=>i.kind==='segment'&&i.type==='snow').reduce((s,i)=>s+Math.hypot((i.x2-i.x)*L,(i.y2-i.y)*W),0));$('subAreas').textContent=geo.wing?`Päärungon kattopinta: ${sqm(slopeAreas[0])} · Siiven kattopinta: ${sqm(slopeAreas[1])}. Liitosgeometria ja mahdolliset päällekkäiset kattopinnat vaativat tarkistuksen.`:roof==='gable'?`Lape A: ${sqm(slopeAreas[0])} · Lape B: ${sqm(slopeAreas[1])}`:geo.hip?`A: ${sqm(slopeAreas[0])} · B: ${sqm(slopeAreas[1])} · C: ${sqm(slopeAreas[2])} · D: ${sqm(slopeAreas[3])}`:`Kokonaispinta-ala sisältää kaltevuuden ${geo.pitch}°.`;$('extras').textContent=`Piiput: ${items.filter(i=>i.type==='chimney').length} · Vilpet: ${items.filter(i=>i.type==='vent').length} · Kattoikkunat: ${items.filter(i=>i.type==='window').length} · Lapetikkaat: ${meters(length('ladder'))} · Kattosillat: ${meters(length('bridge'))}`;persist()}
+function length(type){return geo?items.filter(i=>i.kind==='segment'&&i.type===type).reduce((s,i)=>s+Math.hypot((i.x2-i.x)*geo.L,(i.y2-i.y)*geo.W),0):0}
+function chooseRoof(r){
+ const previous=roof;
+ // Kattotyyppiä vaihdettaessa säilytetään valittu mittaustapa.
+ roof=r;
+ if(['lshape','tshape'].includes(r)&&previous!==r){
+  const len=(mode==='slopes'?val('ridgeL'):val('buildingL')+2*val('overEnd'));
+  const wide=mode==='slopes'?(val('slopeA')+val('slopeB'))*Math.cos(val('pitch')*Math.PI/180):val('buildingW')+2*val('overSide');
+  const wing=mode==='slopes'?(val('slopeC')+val('slopeD'))*Math.cos(val('wingPitch')*Math.PI/180):val('wingWidth');
+  $('joinX').value=Math.round(r==='lshape'?wing/2:len/2);
+  $('joinRidgeOffset').value=Math.max(0,Math.round((wide-wing)/2));
+  if(r==='tshape'){$('wingStart').value=Math.max(0,Math.round((len-wing)/2));}
+ }
+ syncWingRight();
+ $('wingFields').hidden=!['lshape','tshape'].includes(r);
+ $('tPositionFields').hidden=r!=='tshape';
+ function updateApexFromInput(id){
+ if(roof!=='tshape'||!geo||!geo.wing)return;
+ const n=Number($(id).value);
+ if(!Number.isFinite(n)||n<0||n>geo.L)return;
+ const cx=id==='apexLeft'?n:geo.L-n;
+ const start=cx-geo.wing.width/2;
+ if(start<0||start+geo.wing.width>geo.L){$('error').hidden=false;$('error').textContent='Siipi ei mahdu tähän sijaintiin.';return;}
+ $('wingStart').value=String(Math.round(start));$('joinX').value=String(Math.round(cx));syncWingRight();render();
+}
+['apexLeft','apexRight'].forEach(id=>{const el=$(id);el.addEventListener('change',()=>updateApexFromInput(id));el.addEventListener('focus',()=>setTimeout(()=>el.select(),0));el.addEventListener('click',()=>el.select())});
+document.querySelectorAll('[data-roof]').forEach(b=>b.classList.toggle('on',b.dataset.roof===roof));
+ chooseMode(mode,false);
+}
+function chooseMode(m,convert=true){
+ // Tarjotaan lapemitat myös L-, T-, auma- ja pulpettikatoille.
+ // L/T-kattojen sivusiiven mitat syötetään erillisessä osiossa.
+ if(convert && m!==mode && m!=='free'){
+  try{
+   const g=geometry();
+   if(m==='slopes'){
+    const wingCos=Math.cos(val('wingPitch')*Math.PI/180);$('slopeC').value=Math.round(val('wingWidth')/2/wingCos);$('slopeD').value=Math.round(val('wingWidth')/2/wingCos);$('ridgeB').value=Math.round(val('wingDepth'));
+    $('ridgeL').value=Math.round(g.L);
+    $('slopeA').value=Math.round(g.a/Math.cos(val('pitch')*Math.PI/180));
+    $('slopeB').value=Math.round(g.b/Math.cos(val('pitch')*Math.PI/180));
+   }else if(mode==='slopes'){
+    $('wingWidth').value=Math.round((val('slopeC')+val('slopeD'))*Math.cos(val('wingPitch')*Math.PI/180));$('wingDepth').value=Math.round(val('ridgeB'));
+    $('buildingL').value=Math.max(1,Math.round(g.L-2*val('overEnd')));
+    $('buildingW').value=Math.max(1,Math.round((roof==='shed'?g.W:g.a+g.b)-2*val('overSide')));
+   }
+  }catch(e){}
+ }
+ mode=m;
+ document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===mode));
+ $('groundFields').hidden=mode!=='ground';
+ $('slopeFields').hidden=mode!=='slopes';
+ $('freeFields').hidden=mode!=='free';
+ $('slopeB').closest('.field').hidden=mode==='slopes'&&roof==='shed';$('wingSlopeFields').hidden=mode!=='slopes'||!['lshape','tshape'].includes(roof);
+ $('methodTip').textContent=mode==='slopes'?'Syötä kaltevat lapemitat ja katon pituus. L- ja T-katon sivusiiven mitat annetaan ylemmässä osiossa. Liitosgeometria on vielä alustava.':mode==='ground'?'Rakennuksen ulkomitat + molempien puolten räystäsylitykset.':'Vapaa piirtotapa tulee myöhemmässä versiossa; nykyinen kaavio pysyy maajalkamittojen mukaisena.';
+ if(mode==='free'){$('groundFields').hidden=false;}
+ render();
+}
+function coords(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const ctm=svg.getScreenCTM();if(!ctm||!geo)return null;const a=p.matrixTransform(ctm.inverse());const {scale,ox,oy}=geo.transform;return {x:(a.x-ox)/(geo.L*scale),y:(a.y-oy)/(geo.W*scale)}}function inside(p){return p&&p.x>=0&&p.x<=1&&p.y>=0&&p.y<=1}function hint(){let t={move:'Vedä piippua tai muuta merkkiä siirtääksesi sitä.',chimney:'Napauta kattoa lisätäksesi savupiipun.',vent:'Napauta kattoa lisätäksesi Vilpe-läpiviennin.',window:'Napauta kattoa lisätäksesi kattoikkunan.',snow:'Napauta lumiesteen alku- ja loppupiste.',ladder:'Napauta lapetikkaan alku- ja loppupiste.',bridge:'Napauta kattosillan alku- ja loppupiste.',delete:'Napauta poistettavaa merkintää.',edit:'Napauta varustetta ja muuta sen pituutta, suuntaa tai sijaintia.'};$('toolHint').textContent=t[tool]}
+let suppressClick=false;
+function targetAttr(el,key){while(el&&el!==svg){if(el.getAttribute&&el.hasAttribute(key))return el.getAttribute(key);el=el.parentNode}return null}
+function editMeasure(id){
+ if(!$(id))return;
+ const names={apexLeft:'Jiirin kärki vasemmasta päädystä',apexRight:'Jiirin kärki oikeasta päädystä',slopeC:'Lape C:n kalteva pituus',slopeD:'Lape D:n kalteva pituus',ridgeB:'Harja B:n pituus',wingStart:'Siiven etäisyys vasemmasta räystäspäädystä',wingRight:'Siiven etäisyys oikeasta räystäspäädystä',buildingL:'Rakennuksen pituus',buildingW:'Rakennuksen leveys',ridgeL:'Harjan pituus',slopeA:'Lape A:n kalteva pituus',slopeB:'Lape B:n kalteva pituus'};
+ const dialog=$('measureDialog'),input=$('measureInput');
+ $('measureLabel').textContent=(names[id]||'Mitta')+' (mm)';
+ $('measureError').textContent='';input.value=id==='wingRight'?String(Math.max(0,Math.round(geo.L-geo.wing.width-geo.wing.start))):$(id).value;
+ dialog.dataset.field=id;delete dialog.dataset.side;
+ dialog.showModal();
+ setTimeout(()=>{input.focus();input.select()},80);
+}
+$('measureCancel').onclick=()=>$('measureDialog').close();
+$('measureDialog').querySelector('form').addEventListener('submit',e=>{
+ e.preventDefault();const id=$('measureDialog').dataset.field;
+ const value=Number($('measureInput').value.trim().replace(',','.').replace(/\s/g,''));
+ if(id==='jiiri'){const error=applyJiiri($('measureDialog').dataset.side,value);if(error){$('measureError').textContent=error;return;}$('measureDialog').close();return;}
+ if(!Number.isFinite(value)||value<=0){$('measureError').textContent='Syötä positiivinen mitta millimetreinä.';return}
+ if(id==='apexLeft'||id==='apexRight'){
+   if(!geo||!geo.wing||roof!=='tshape'||value>=geo.L){$('measureError').textContent='Sijainnin on oltava katon pituuden sisällä.';return;}
+   const cxNew=id==='apexLeft'?value:geo.L-value;
+   const startNew=cxNew-geo.wing.width/2;
+   if(startNew<0||startNew+geo.wing.width>geo.L){$('measureError').textContent='Siipi ei mahdu tähän sijaintiin. Tarkista siiven leveys.';return;}
+   $('wingStart').value=String(Math.round(startNew));$('joinX').value=String(cxNew);
+ }else if(id==='wingRight'){ $('wingStart').value=String(geo.L-geo.wing.width-value); }else{ $(id).value=String(value); }syncWingRight();$('measureDialog').close();render();persist();
+});
+
+function editObject(idx){const it=items[idx];if(!it||!geo)return;
+ if(it.kind==='segment'){
+   const lengthNow=Math.hypot((it.x2-it.x)*geo.L,(it.y2-it.y)*geo.W);const inp=prompt('Varusteen pituus katon vaakakuvassa (mm)',String(Math.round(lengthNow)));
+   if(inp===null)return;const len=Number(inp.trim().replace(',','.'));if(!Number.isFinite(len)||len<=0||len>50000){alert('Anna kelvollinen pituus millimetreinä.');return}
+   const angle0=Math.atan2((it.y2-it.y)*geo.W,(it.x2-it.x)*geo.L)*180/Math.PI;
+   const a=prompt('Varusteen suunta asteina vaakatasosta (0 = oikealle, 90 = alas)',String(Math.round(angle0)));
+   if(a===null)return;const angle=Number(a.trim().replace(',','.'));if(!Number.isFinite(angle)){alert('Virheellinen kulma.');return}
+   const rad=angle*Math.PI/180,x2=it.x+len*Math.cos(rad)/geo.L,y2=it.y+len*Math.sin(rad)/geo.W;
+   if(x2<0||x2>1||y2<0||y2>1){alert('Varuste ei mahdu nykyiseen kattokaavioon. Siirrä sitä ensin lähemmäksi katon keskikohtaa.');return}
+   push();it.x2=x2;it.y2=y2;render();
+ }else{
+   const pos=prompt('Sijainti katon pituussuunnassa vasemmasta reunasta (mm)',String(Math.round(it.x*geo.L)));if(pos===null)return;
+   const y=prompt('Sijainti katon leveyssuunnassa yläreunasta (mm)',String(Math.round(it.y*geo.W)));if(y===null)return;
+   const xVal=Number(pos.replace(',','.')),yVal=Number(y.replace(',','.'));
+   if(!Number.isFinite(xVal)||!Number.isFinite(yVal)||xVal<0||yVal<0||xVal>geo.L||yVal>geo.W){alert('Tarkista sijaintimitat.');return}
+   push();it.x=xVal/geo.L;it.y=yVal/geo.W;render();
+ }
+}
+function editJiiri(side){
+ if(!geo||!geo.wing)return;
+ const w=geo.wing,cx=val('joinX'),ay=w.bodyW/2+val('joinRidgeOffset');
+ const ex=side==='left'?w.start:w.start+w.width;
+ const current=Math.hypot(cx-ex,ay-w.bodyW);
+ const dialog=$('measureDialog'),input=$('measureInput');
+ dialog.dataset.field='jiiri';dialog.dataset.side=side;
+ $('measureLabel').textContent='Jiirin vaakaprojektion pituus (mm)';
+ $('measureError').textContent='';
+ input.value=String(Math.round(current));
+ dialog.showModal();
+ setTimeout(()=>{input.focus();input.select()},80);
+}
+function applyJiiri(side,length){
+ if(!geo||!geo.wing)return 'Kattokaavio ei ole valmis.';
+ const w=geo.wing,cx=val('joinX');
+ const ex=side==='left'?w.start:w.start+w.width;
+ const dx=cx-ex;
+ if(!Number.isFinite(length)||length<=Math.abs(dx))return 'Jiirin pituuden tulee olla suurempi kuin sivusiirtymä ('+mm(Math.abs(dx))+' mm).';
+ const dy=Math.sqrt(length*length-dx*dx);
+ const newApexY=w.bodyW-dy;
+ if(newApexY<w.bodyW/2||newApexY>=w.bodyW)return 'Mitta ei sovi kaavioon. Säädä jiirin sijaintia tai siiven leveyttä.';
+ $('joinRidgeOffset').value=Math.round(newApexY-w.bodyW/2);
+ render();persist();
+ return null;
+}
+function handleTap(e){if(!geo||suppressClick)return;if(dimEditMode&&targetAttr(e.target,'data-dim-handle'))return;const jiiri=targetAttr(e.target,'data-jiiri');if(jiiri){editJiiri(jiiri);return;}const edit=targetAttr(e.target,'data-edit');if(edit){editMeasure(edit);return}const idx=targetAttr(e.target,'data-idx');if(tool==='delete'){if(idx!==null){push();items.splice(Number(idx),1);render()}return}if(tool==='edit'){if(idx!==null)editObject(Number(idx));return}const p=coords(e);if(!inside(p)||mode==='free')return;if(['snow','ladder','bridge'].includes(tool)){if(!pending){pending=p;$('toolHint').textContent='Aloituspiste merkitty. Napauta nyt loppupistettä.'}else{push();items.push({kind:'segment',type:tool,x:pending.x,y:pending.y,x2:p.x,y2:p.y});pending=null;hint()}}else if(['chimney','vent','window'].includes(tool)){push();items.push({kind:'symbol',type:tool,x:p.x,y:p.y});$('toolHint').textContent='Merkintä lisätty. Voit napauttaa kattoa lisätäksesi toisen.'}render()}
+svg.addEventListener('click',handleTap);
+// Kosketusohjaus: yksittäisen merkin veto ja kahden sormen zoomaus.
+function nearbyItem(e){const found=targetAttr(e.target,'data-idx');if(found!==null)return Number(found);const pt=svgPos(e);if(!pt||!geo)return null;const {scale,ox,oy}=geo.transform;let best=null,dist=Infinity;items.forEach((it,i)=>{let px=ox+it.x*geo.L*scale,py=oy+it.y*geo.W*scale;let d=Math.hypot(pt.x-px,pt.y-py);if(it.kind==='segment'){let ex=ox+it.x2*geo.L*scale,ey=oy+it.y2*geo.W*scale;const t=Math.max(0,Math.min(1,((pt.x-px)*(ex-px)+(pt.y-py)*(ey-py))/(Math.pow(ex-px,2)+Math.pow(ey-py,2)||1)));d=Math.hypot(pt.x-(px+t*(ex-px)),pt.y-(py+t*(ey-py)))}if(d<dist){dist=d;best=i}});return dist<=28*(view.w/700)?best:null}
+// V4.3: Yhteinen kosketusohjain iPhonelle: yhden sormen panorointi ja kahden sormen zoomaus.
+let gesture=null;
+function inDrawing(e){return e.target===svg || svg.contains(e.target)}
+function screenToScene(cx,cy,v=view){const r=svg.getBoundingClientRect();return {x:v.x+(cx-r.left)/r.width*v.w,y:v.y+(cy-r.top)/r.height*v.h}}
+function touchSnapshot(){const a=Array.from(touches.values());if(a.length<2)return null;const cx=(a[0].clientX+a[1].clientX)/2,cy=(a[0].clientY+a[1].clientY)/2;return {cx,cy,d:Math.max(1,Math.hypot(a[0].clientX-a[1].clientX,a[0].clientY-a[1].clientY))}}
+function beginPinch(){const z=touchSnapshot();if(!z)return;gesture={kind:'pinch',start:z,anchor:screenToScene(z.cx,z.cy),view:{...view}};drag=null;dragPointer=null;dragStart=null;dragOriginal=null;suppressClick=true}
+svg.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  touches.set(e.pointerId,{clientX:e.clientX,clientY:e.clientY});
+  try{svg.setPointerCapture(e.pointerId)}catch(err){}
+  if(touches.size>=2){beginPinch();e.preventDefault();return}
+  if(dimEditMode&&geo&&geo.wing){
+    const handle=targetAttr(e.target,'data-dim-handle');
+    if(handle){const [key,part]=handle.split(':');
+      dimDrag={pointerId:e.pointerId,key,part};gesture={kind:'dimension'};
+      e.preventDefault();return;
+    }
+  }
+  if(tool==='move'&&geo){
+    const idx=nearbyItem(e);
+    if(idx!==null){drag=idx;dragPointer=e.pointerId;dragStart=coords(e);dragOriginal={...items[idx]};gesture={kind:'item'};e.preventDefault();return}
+    // Tyhjällä piirtoalueella vedetään koko kattokaaviota.
+    gesture={kind:'pan',clientX:e.clientX,clientY:e.clientY,view:{...view},moved:false};
+  }
+},{passive:false});
+svg.addEventListener('pointermove',e=>{
+  if(!touches.has(e.pointerId))return;
+  touches.set(e.pointerId,{clientX:e.clientX,clientY:e.clientY});
+  if(touches.size>=2){
+    if(!gesture||gesture.kind!=='pinch')beginPinch();
+    const now=touchSnapshot(),first=gesture.start,initial=gesture.view;
+    const factor=now.d/first.d;
+    const w=Math.max(115,Math.min(1400,initial.w/factor)),h=w*480/700;
+    const r=svg.getBoundingClientRect();
+    view={x:gesture.anchor.x-(now.cx-r.left)/r.width*w,y:gesture.anchor.y-(now.cy-r.top)/r.height*h,w,h};
+    setView();suppressClick=true;e.preventDefault();return;
+  }
+  if(dimDrag&&dimDrag.pointerId===e.pointerId&&geo&&geo.wing){
+    const point=svgPos(e);if(!point)return;
+    const w=geo.wing, t=geo.transform;
+    const key=dimDrag.key, ridge=key==='HB'||key==='HM';
+    const edgeX=t.ox+(w.start+(key==='D'?w.width:0))*t.scale;
+    const top=t.oy+w.bodyW*t.scale, bottom=t.oy+geo.W*t.scale;
+    const cfg=dimLayout[key];
+    if(ridge){
+      const isB=key==='HB';
+      const baseX=isB?t.ox+(w.start+w.width)*t.scale:350;
+      const baseY=isB?t.oy+(w.bodyW+w.depth*0.52)*t.scale:t.oy+12;
+      const attachX=isB?t.ox+(w.start+w.width/2)*t.scale:t.ox+geo.L*t.scale/2;
+      const attachY=isB?t.oy+(w.bodyW+w.depth*0.52)*t.scale:t.oy+w.bodyW*t.scale/2;
+      if(dimDrag.part==='anchor'){
+        cfg.ax=Math.max(-500,Math.min(500,point.x-attachX));
+        cfg.ay=Math.max(-350,Math.min(350,point.y-attachY));
+      }else{
+        cfg.dx=Math.max(-500,Math.min(500,point.x-baseX));
+        cfg.dy=Math.max(-350,Math.min(350,point.y-baseY));
+      }
+    }else if(dimDrag.part==='anchor'){
+      cfg.ax=Math.max(-500,Math.min(500,point.x-edgeX));
+      cfg.anchor=Math.max(-1.5,Math.min(2.5,(point.y-top)/(bottom-top)));
+    }else{
+      cfg.dx=Math.max(-500,Math.min(500,point.x-edgeX));
+      cfg.dy=Math.max(-350,Math.min(350,point.y-bottom));
+    }
+    suppressClick=true;render();e.preventDefault();return;
+  }
+  if(gesture&&gesture.kind==='pan'){
+    const g=gesture,rect=svg.getBoundingClientRect(),dx=e.clientX-g.clientX,dy=e.clientY-g.clientY;
+    if(Math.abs(dx)+Math.abs(dy)>5)g.moved=true;
+    if(g.moved){view={...g.view,x:g.view.x-dx/rect.width*g.view.w,y:g.view.y-dy/rect.height*g.view.h};setView();suppressClick=true;e.preventDefault()}
+    return;
+  }
+  if(drag===null||dragPointer!==e.pointerId||!geo)return;
+  const p=coords(e);if(!p||!dragStart||!dragOriginal)return;
+  const it=items[drag],dx=p.x-dragStart.x,dy=p.y-dragStart.y,clamp=x=>Math.max(0,Math.min(1,x));
+  it.x=clamp(dragOriginal.x+dx);it.y=clamp(dragOriginal.y+dy);
+  if(it.kind==='segment'){it.x2=clamp(dragOriginal.x2+dx);it.y2=clamp(dragOriginal.y2+dy)}
+  suppressClick=true;render();e.preventDefault();
+},{passive:false});
+function stopPointer(e){
+  if(dimDrag&&dimDrag.pointerId===e.pointerId){dimDrag=null;persist();suppressClick=true;}
+  const multi=gesture&&gesture.kind==='pinch';touches.delete(e.pointerId);
+  if(dragPointer===e.pointerId&&drag!==null){
+    if(dragStart&&items[drag]&&JSON.stringify(items[drag])!==JSON.stringify(dragOriginal))history.push(JSON.stringify(items.map((it,i)=>i===drag?dragOriginal:it)));
+    drag=null;dragPointer=null;dragStart=null;dragOriginal=null;persist();
+  }
+  if(multi&&touches.size===1){const t=[...touches.values()][0];gesture={kind:'pan',clientX:t.clientX,clientY:t.clientY,view:{...view},moved:true}}
+  else if(touches.size===0)gesture=null;
+  if(multi||suppressClick){setTimeout(()=>{if(touches.size===0)suppressClick=false},250)}
+}
+svg.addEventListener('pointerup',stopPointer);svg.addEventListener('pointercancel',stopPointer);
+function snapshot(){return {roof,mode,items:JSON.parse(JSON.stringify(items)),values:Object.fromEntries(ids.map(i=>[i,$(i).value])),dimLayout:JSON.parse(JSON.stringify(dimLayout))}}
+function status(message){$('saveStatus').textContent=message}
+function applySnapshot(data,name){
+ if(!data||!['gable','hip','shed','lshape','tshape'].includes(data.roof)||!['ground','slopes','free'].includes(data.mode)||!Array.isArray(data.items)||!data.values||typeof data.values!=='object')throw Error('Työmaatiedosto on virheellinen.');
+ roof=data.roof;mode=data.mode;items=data.items;dimLayout=normalizeDimLayout(data.dimLayout);ids.forEach(i=>{if(data.values[i]!==undefined)$(i).value=data.values[i]});
+ $('projectName').value=name||'';chooseRoof(roof);chooseMode(mode);hint();view={x:0,y:0,w:700,h:480};setView();render();persist();
+}
+$('saveProject').onclick=()=>{
+ const name=$('projectName').value.trim();if(!name){status('Anna työmaalle nimi ennen tallentamista.');$('projectName').focus();return}
+ try{
+ const projects=JSON.parse(localStorage.getItem('roofProjects45')||'{}');projects[name]=snapshot();
+ const serialized=JSON.stringify(projects);localStorage.setItem('roofProjects45',serialized);
+ if(localStorage.getItem('roofProjects45')!==serialized)throw Error('Tallennusta ei voitu varmistaa');
+ status('✓ Työmaa ”'+name+'” tallennettu tähän selaimeen. Suosittelemme myös varmuuskopion lataamista.');
+ }catch(e){status('⚠️ Tallennus selaimeen epäonnistui. Käytä Lataa varmuuskopio -painiketta.')} 
+};
+$('loadProject').onclick=()=>{
+ try{
+ const projects=JSON.parse(localStorage.getItem('roofProjects45')||'{}');const names=Object.keys(projects);
+ if(!names.length){status('Ei tallennettuja työmaita tässä selaimessa. Jos sinulla on varmuuskopio, valitse Avaa tiedostosta.');return}
+ const name=prompt('Kirjoita avattavan työmaan nimi:\n'+names.join('\n'),names[0]);
+ if(name===null)return;if(!projects[name]){status('Työmaata ei löytynyt.');return}
+ applySnapshot(projects[name],name);status('✓ Työmaa ”'+name+'” avattu.');
+ }catch(e){status('Työmaan avaaminen ei onnistunut: '+e.message)}
+};
+$('exportProject').onclick=()=>{
+ const name=$('projectName').value.trim()||'Nimeton työmaa';
+ const payload={format:'kattolaskenta-project',version:1,name,data:snapshot()};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;
+ a.download='kattolaskenta_'+name.replace(/[^a-zA-Z0-9äöåÄÖÅ_-]/g,'_').slice(0,60)+'.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ status('Varmuuskopio ladattu. Tarkista iPhonen Tiedostot/Lataukset-kansio.');
+};
+$('importProject').onclick=()=>$('importFile').click();
+$('importFile').addEventListener('change',async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{if(file.size>2000000)throw Error('Tiedosto on liian suuri');
+ const content=JSON.parse(await file.text());
+ if(content.format!=='kattolaskenta-project'||content.version!==1)throw Error('Tiedosto ei ole Kattolaskennan varmuuskopio');
+ applySnapshot(content.data,content.name);status('✓ Työmaa ”'+content.name+'” avattu varmuuskopiosta.');
+ }catch(err){status('⚠️ Tiedoston avaaminen epäonnistui: '+err.message)}
+ e.target.value='';
+});
+$('toggleDimEdit').onclick=()=>{dimEditMode=!dimEditMode;dimDrag=null;
+ $('toggleDimEdit').textContent=dimEditMode?'✓ Valmis – lukitse mitat':'✥ Muokkaa C-, D- ja harjamittoja';
+ $('dimEditTip').hidden=!dimEditMode;render()};
+$('resetDimEdit').onclick=()=>{dimLayout=defaultDimLayout();render();persist()};
+$('zoomIn').onclick=()=>zoomAt(1.4);$('zoomOut').onclick=()=>zoomAt(1/1.4);$('zoomReset').onclick=()=>{view={x:0,y:0,w:700,h:480};setView()};
+svg.addEventListener('wheel',e=>{e.preventDefault();const p=svgPos(e)||{x:350,y:240};zoomAt(e.deltaY<0?1.15:1/1.15,p.x,p.y)},{passive:false});
+document.querySelectorAll('[data-roof]').forEach(b=>b.addEventListener('click',()=>chooseRoof(b.dataset.roof)));document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>chooseMode(b.dataset.mode)));document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>{tool=b.dataset.tool;pending=null;document.querySelectorAll('[data-tool]').forEach(x=>x.classList.toggle('on',x.dataset.tool===tool));hint();render()}));ids.forEach(i=>{const field=$(i);field.addEventListener('input',()=>{syncWingRight();render()});field.addEventListener('focus',()=>setTimeout(()=>{try{field.select()}catch(e){}},0));field.addEventListener('click',()=>{try{field.select()}catch(e){}})});$('wingRight').addEventListener('input',()=>{$('wingStart').value=String((mode==='slopes'?val('ridgeL'):val('buildingL')+2*val('overEnd'))-(geo&&geo.wing?geo.wing.width:val('wingWidth'))-val('wingRight'));render()});$('wingRight').addEventListener('focus',()=>setTimeout(()=>$('wingRight').select(),0));$('wingRight').addEventListener('click',()=>$('wingRight').select());$('undo').onclick=()=>{if(pending){pending=null;render();return}if(history.length){items=JSON.parse(history.pop());render()}};$('reset').onclick=()=>{if(confirm('Poistetaanko kaikki kattokaavioon lisätyt merkinnät?')){push();items=[];pending=null;render()}};$('fit').onclick=()=>{view={x:0,y:0,w:700,h:480};setView();render();svg.scrollIntoView({behavior:'smooth',block:'center'})};$('save').onclick=()=>{try{persist();$('save').textContent='✓ Tallennusyritys tehty';status('Huom: pikatalletus säilyttää viimeisimmän kaavion selaimessa. Työmaan varmuuskopio kannattaa ladata erikseen.')}catch(e){status('Tallennus epäonnistui. Lataa varmuuskopio.')}setTimeout(()=>$('save').textContent='💾 Tallenna',1600)};try{const saved=JSON.parse(localStorage.getItem('roofV4')||'null');if(saved){dimLayout=normalizeDimLayout(saved.dimLayout);roof=saved.roof||roof;mode=saved.mode||mode;items=Array.isArray(saved.items)?saved.items:[];ids.forEach(i=>{if(saved.values&&saved.values[i]!==undefined)$(i).value=saved.values[i]})}}catch(e){}chooseRoof(roof);hint();setView();})();
+</script></body></html>
